@@ -15,13 +15,21 @@ const IndexScreen = ({ navigation }) => {
 
   useEffect(() => {
     getBlogPosts();
+
+    const listener = navigation.addListener("didFocus", () => {
+      getBlogPosts();
+    });
+
+    return () => {
+      listener.remove();
+    };
   }, []);
 
   return (
     <View>
       <FlatList
         data={state}
-        keyExtractor={blogPost => blogPost.id}
+        keyExtractor={blogPost => blogPost.id.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() => navigation.navigate("Show", { id: item.id })}
